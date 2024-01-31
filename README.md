@@ -1,2 +1,2 @@
-# block32exercise
+# block06exercise
 
