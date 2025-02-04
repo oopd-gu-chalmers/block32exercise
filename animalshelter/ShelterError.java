@@ -6,7 +6,8 @@ package animalshelter;
 public class ShelterError {
 
     public static void main(String[] args){
-        CatShelter catShelter = new CatShelter();
+        // CatShelter catShelter = new CatShelter();
+        AnimalShelter<Cat> catShelter = new AnimalShelter();
         Dog badBoyRex = new Dog();
 
         // TODO task 2a: It should not be possible to inser a dog into a cat

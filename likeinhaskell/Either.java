@@ -23,8 +23,65 @@ package likeinhaskell;
 //  Hint: Where Haskell creates a data type by listing constructors, an
 //     OO language like Java would use subclassing.
 //  Hint: The most elegant solution uses inner classes (look them up).
-public class Either {
-    // public boolean isLeft(){...}
-    // public boolean isRight(){...}
-    // public T either((L->T)->(R->T)->T) func){...}
+public class Either<A,B> {
+    private final A a;
+    private final B b;
+
+    public static <A,B> Either<A,B> Left(A a) {
+        return new Either(a, null);
+    }
+
+    public static <A,B> Either<A,B> Right(B b) {
+        return new Either(null, b);
+    }
+
+    private Either(A a, B b) {
+        this.a = a;
+        this.b = b;
+    }
+    
+    public boolean isLeft() {
+        return b == null;
+    }
+    
+    public boolean isRight() {
+        return a == null;
+    }
+    
+    public <T> T either(Function<A,T> left, Function<B,T> right) {
+        if (this.isLeft()) {
+            return left.apply(this.a);
+        } else {
+            return right.apply(this.b);
+        }
+    }
+
+    public static void main(String[] args) {
+        Either<String,Integer> e1 = Either.Left("Hello");
+        Either<String,Integer> e2 = Either.Right(123);
+
+        System.out.println(e1.isLeft());
+        System.out.println(e1.isRight());
+        System.out.println(e2.isLeft());
+        System.out.println(e2.isRight());
+
+        class PrintString implements Function<String,Void> {
+            @Override
+            public Void apply(String s) {
+                System.out.println("#" + s + "#");
+                return null;
+            }
+        }
+
+        class PrintInteger implements Function<Integer,Void> {
+            @Override
+            public Void apply(Integer i) {
+                System.out.println("$" + i.toString() + "$");
+                return null;
+            }
+        }
+
+        e1.either(new PrintString(), new PrintInteger());
+        e2.either(new PrintString(), new PrintInteger());
+    }
 }
